@@ -1,0 +1,52 @@
+.artist-list-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.artist-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.btn-primary {
+  background-color: var(--color-primary) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-secondary) !important;
+}
+
+.artist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.artist-card {
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-border);
+  border-radius: 16px !important;
+}
+
+.artist-genre {
+  color: var(--color-primary) !important;
+  margin-top: 4px !important;
+}
+
+.artist-albums {
+  color: var(--color-text-secondary) !important;
+  margin-top: 8px !important;
+}
+
+.artist-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn-delete {
+  color: var(--color-error) !important;
+}
