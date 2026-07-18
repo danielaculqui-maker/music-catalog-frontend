@@ -1,0 +1,21 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.navbar-logo {
+  color: var(--color-primary) !important;
+  font-family: var(--heading);
+}
+
+.navbar-logout {
+  color: var(--color-text-secondary) !important;
+}
+
+.navbar-logout:hover {
+  color: var(--color-error) !important;
+}

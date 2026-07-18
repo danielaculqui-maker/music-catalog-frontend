@@ -1,11 +1,16 @@
 .login-container {
-  max-width: 350px;
+  max-width: 380px;
   margin: 0 auto;
-  margin-top: 64px;
+  margin-top: 80px;
+  padding: 32px;
+  background-color: var(--color-surface);
+  border-radius: 16px;
 }
 
 .login-title {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  color: var(--color-text);
+  font-weight: 600;
 }
 
 .login-alert {
@@ -13,5 +18,10 @@
 }
 
 .login-button {
-  margin-top: 16px;
+  margin-top: 20px;
+  background-color: var(--color-primary) !important;
+}
+
+.login-button:hover {
+  background-color: var(--color-secondary) !important;
 }
