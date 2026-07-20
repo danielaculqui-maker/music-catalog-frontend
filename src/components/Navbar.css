@@ -8,8 +8,23 @@
 }
 
 .navbar-logo {
-  color: var(--color-primary) !important;
+  color: var(--color-text) !important;
   font-family: var(--heading);
+  letter-spacing: -0.3px;
+  cursor: pointer;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 8px;
+}
+
+.navbar-link {
+  color: var(--color-text-secondary) !important;
+}
+
+.navbar-link:hover {
+  color: var(--color-primary) !important;
 }
 
 .navbar-logout {

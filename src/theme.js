@@ -24,6 +24,17 @@ const theme = createTheme({
   shape: {
     borderRadius: 12,
   },
+  components: {
+  MuiInputLabel: {
+    styleOverrides: {
+      root: {
+        backgroundColor: '#1E1E2E',
+        paddingLeft: 4,
+        paddingRight: 4,
+      },
+    },
+  },
+},
   typography: {
   fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
   h1: { fontFamily: '"Space Grotesk", sans-serif', fontWeight: 600, letterSpacing: '-0.5px' },

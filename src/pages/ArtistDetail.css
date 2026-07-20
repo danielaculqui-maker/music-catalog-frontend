@@ -1,0 +1,61 @@
+.artist-detail-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.back-button {
+  color: var(--color-text-secondary) !important;
+  margin-bottom: 16px !important;
+}
+
+.artist-detail-header {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.detail-photo {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.detail-genre {
+  color: var(--color-primary) !important;
+  margin-top: 4px !important;
+}
+
+.detail-date {
+  color: var(--color-text-secondary) !important;
+  margin-top: 4px !important;
+}
+
+.detail-bio {
+  color: var(--color-text-secondary) !important;
+  line-height: 1.6;
+  margin-bottom: 32px !important;
+}
+
+.albums-title {
+  margin-bottom: 16px !important;
+}
+
+.albums-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.album-card {
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-border);
+  border-radius: 12px !important;
+}
+
+.album-info {
+  color: var(--color-text-secondary) !important;
+  margin-top: 4px !important;
+}

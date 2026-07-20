@@ -1,0 +1,24 @@
+.foto-preview {
+  margin: 16px 0;
+}
+
+.foto-preview-label {
+  display: block;
+  color: var(--color-text-secondary) !important;
+  margin-bottom: 6px;
+}
+
+.foto-preview img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.btn-upload {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+  width: 100%;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
