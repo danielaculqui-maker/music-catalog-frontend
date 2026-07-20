@@ -44,6 +44,9 @@ function ArtistList() {
         <div className="artist-grid">
           {artistas.map(artista => (
             <Card key={artista.id} className="artist-card">
+              {artista.foto && (
+                <img src={artista.foto} alt={artista.nombre} className="artist-photo" />
+              )}
               <CardContent>
                 <Typography variant="h6">{artista.nombre}</Typography>
                 <Typography variant="body2" className="artist-genre">
@@ -52,21 +55,17 @@ function ArtistList() {
                 <Typography variant="body2" className="artist-albums">
                   {artista.albumes?.length || 0} álbum(es)
                 </Typography>
-                <div className="artist-actions">
-                  <Button
-                    size="small"
-                    onClick={() => navigate(`/artistas/editar/${artista.id}`)}
-                  >
-                    Editar
-                  </Button>
-                  <Button
-                    size="small"
-                    className="btn-delete"
-                    onClick={() => handleDelete(artista.id)}
-                  >
-                    Eliminar
-                  </Button>
-                </div>
+              <div className="artist-actions">
+                <Button size="small" onClick={() => navigate(`/artistas/${artista.id}`)}>
+                Ver
+                </Button>
+                <Button size="small" onClick={() => navigate(`/artistas/editar/${artista.id}`)}>
+                Editar
+                </Button>
+                <Button size="small" className="btn-delete" onClick={() => handleDelete(artista.id)}>
+               Eliminar
+              </Button>
+</div>
               </CardContent>
             </Card>
           ))}
