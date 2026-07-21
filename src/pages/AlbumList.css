@@ -18,3 +18,16 @@
   object-fit: cover;
   object-position: top;
 }
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+
+.empty-state {
+  color: var(--color-text-secondary) !important;
+  text-align: center;
+  margin-top: 48px !important;
+}

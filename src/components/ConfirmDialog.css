@@ -1,0 +1,21 @@
+.confirm-dialog .MuiPaper-root {
+  background-color: var(--color-surface) !important;
+  border-radius: 16px !important;
+  min-width: 320px;
+}
+
+.confirm-dialog-title {
+  color: var(--color-text) !important;
+}
+
+.confirm-dialog-message {
+  color: var(--color-text-secondary) !important;
+}
+
+.confirm-dialog-cancel {
+  color: var(--color-text-secondary) !important;
+}
+
+.confirm-dialog-confirm {
+  color: var(--color-error) !important;
+}
