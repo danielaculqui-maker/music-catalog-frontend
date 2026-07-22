@@ -25,3 +25,13 @@
 .login-button:hover {
   background-color: var(--color-secondary) !important;
 }
+
+.login-logo {
+  position: absolute;
+  top: 24px;
+  left: 32px;
+  color: var(--color-text) !important;
+  font-family: var(--heading);
+  letter-spacing: -0.3px;
+  z-index: 2;
+}

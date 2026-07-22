@@ -1,32 +1,33 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getArtistas, deleteArtista } from '../services/artistaService'
-import { Button, Typography, Card, CardContent, CircularProgress } from '@mui/material'
+import { Button, Typography, Card, CardContent, CircularProgress, TextField, InputAdornment } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 import Navbar from '../components/Navbar'
 import ConfirmDialog from '../components/ConfirmDialog'
-import './ArtistList.css'
 import ErrorAlert from '../components/ErrorAlert'
+import './ArtistList.css'
 
 function ArtistList() {
   const [artistas, setArtistas] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
+  const [busqueda, setBusqueda] = useState('')
   const [dialogoAbierto, setDialogoAbierto] = useState(false)
   const [artistaAEliminar, setArtistaAEliminar] = useState(null)
   const navigate = useNavigate()
-  
 
   const cargarArtistas = () => {
-  setCargando(true)
-  setError('')
-  getArtistas()
-    .then(response => setArtistas(response.data))
-    .catch(error => {
-      console.error('Error al traer artistas:', error)
-      setError('No se pudieron cargar los artistas. Verificá tu conexión o intentá de nuevo.')
-    })
-    .finally(() => setCargando(false))
-}
+    setCargando(true)
+    setError('')
+    getArtistas()
+      .then(response => setArtistas(response.data))
+      .catch(error => {
+        console.error('Error al traer artistas:', error)
+        setError('No se pudieron cargar los artistas. Verificá tu conexión o intentá de nuevo.')
+      })
+      .finally(() => setCargando(false))
+  }
 
   useEffect(() => {
     cargarArtistas()
@@ -38,16 +39,20 @@ function ArtistList() {
   }
 
   const confirmarEliminar = async () => {
-  try {
-    await deleteArtista(artistaAEliminar)
-    setDialogoAbierto(false)
-    cargarArtistas()
-  } catch (error) {
-    console.error('Error al eliminar:', error)
-    setError('No se pudo eliminar el artista. Intentá de nuevo.')
-    setDialogoAbierto(false)
+    try {
+      await deleteArtista(artistaAEliminar)
+      setDialogoAbierto(false)
+      cargarArtistas()
+    } catch (error) {
+      console.error('Error al eliminar:', error)
+      setError('No se pudo eliminar el artista. Intentá de nuevo.')
+      setDialogoAbierto(false)
+    }
   }
-}
+
+  const artistasFiltrados = artistas.filter(artista =>
+    artista.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  )
 
   if (cargando) {
     return (
@@ -64,6 +69,23 @@ function ArtistList() {
     <div>
       <Navbar />
       <div className="artist-list-container">
+        <ErrorAlert message={error} />
+
+        <TextField
+          placeholder="Buscar artista..."
+          fullWidth
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="search-field"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: 'var(--color-text-secondary)' }} />
+              </InputAdornment>
+            ),
+          }}
+        />
+
         <div className="artist-list-header">
           <Typography variant="h4">Artistas</Typography>
           <Button
@@ -74,14 +96,16 @@ function ArtistList() {
             + Nuevo artista
           </Button>
         </div>
-        <ErrorAlert message={error} />
-        {artistas.length === 0 ? (
+
+        {artistasFiltrados.length === 0 ? (
           <Typography className="empty-state">
-            Todavía no hay artistas cargados. ¡Creá el primero!
+            {busqueda
+              ? 'No se encontraron artistas con ese nombre.'
+              : 'Todavía no hay artistas cargados. ¡Creá el primero!'}
           </Typography>
         ) : (
           <div className="artist-grid">
-            {artistas.map(artista => (
+            {artistasFiltrados.map(artista => (
               <Card key={artista.id} className="artist-card">
                 {artista.foto && (
                   <img src={artista.foto} alt={artista.nombre} className="artist-photo" />
