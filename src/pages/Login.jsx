@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { login } from '../services/authService'
-import { TextField, Button, Typography, Alert } from '@mui/material'
+import { TextField, Button, Typography, Alert, Box } from '@mui/material'
 import './Login.css'
 
 function Login() {
@@ -10,20 +10,23 @@ function Login() {
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    try {
-      const response = await login(username, password)
-      localStorage.setItem('access_token', response.data.access_token)
-      navigate('/artistas')
-    } catch (err) {
-      setError('Usuario o contraseña incorrectos')
-    }
+ const handleSubmit = async (e) => {
+  e.preventDefault()
+  setError('')
+  try {
+    const response = await login(username, password)
+    localStorage.setItem('access_token', response.data.access_token)
+    localStorage.setItem('username', username)
+    navigate('/artistas')
+  } catch (err) {
+    setError('Usuario o contraseña incorrectos')
   }
+}
+return (
+  <div className="login-page">
+    <Typography variant="h5" className="login-logo">Vinly</Typography>
 
-  return (
-    <div className="login-container">
+    <Box className="login-container">
       <Typography variant="h5" className="login-title">Iniciar sesión</Typography>
       {error && <Alert severity="error" className="login-alert">{error}</Alert>}
       <form onSubmit={handleSubmit}>
@@ -46,8 +49,9 @@ function Login() {
           Ingresar
         </Button>
       </form>
-    </div>
-  )
+    </Box>
+  </div>
+)
 }
 
 export default Login
