@@ -1,37 +1,70 @@
 # Music Catalog - Frontend
 
-Aplicación web desarrollada con React (Vite) que consume la API REST del backend para gestionar un catálogo de artistas y álbumes musicales, con autenticación OAuth 2.0.
+## Autores
 
-## 🛠️ Tecnologías
+- Daniela Culqui
+- Cristian Tenorio
 
-- React (Vite)
-- React Router DOM
-- Material UI (MUI)
-- Axios
+## Descripción General
 
-## 📋 Requisitos previos
+Aplicación web desarrollada con React que consume una API REST construida en Django para gestionar un catálogo de artistas y álbumes musicales, con autenticación OAuth 2.0.
+
+## Objetivo
+
+Construir una aplicación completa en React que consuma la API REST del backend, permitiendo listar, crear, editar y eliminar artistas y álbumes, con autenticación OAuth 2.0 y una interfaz cuidada usando Material UI.
+
+## Requisitos previos
 
 - Node.js y npm instalados
+- Editor de código (recomendado: VS Code)
+- Navegador actualizado (recomendado: Chrome)
+- React (usar Vite)
 - El backend (`music-catalog-backend`) corriendo en `http://127.0.0.1:8000`
 
-## 🚀 Instalación
+## Requisitos técnicos
 
-### 1. Clonar el repositorio
+- Material UI (@mui/material, @emotion/react, @emotion/styled)
+- Axios para las llamadas a la API
+- React Router DOM para la navegación
+- Variables de entorno (.env) para configurar la URL de la API y las credenciales OAuth
 
-```bash
-git clone https://github.com/TU_USUARIO/music-catalog-frontend.git
-cd music-catalog-frontend
+## Funcionalidades
+
+- Login con autenticación OAuth 2.0
+- Listado de artistas y álbumes, con buscador
+- Crear, editar y eliminar artistas (incluye carga de foto)
+- Crear, editar y eliminar álbumes
+- Visualización de detalle de artista, con sus álbumes asociados
+- Manejo de errores visible en pantalla
+- Estados de carga y confirmaciones de eliminación
+- Diseño responsive (adaptado a celulares)
+
+## Estructura del proyecto
+
+```
+/src
+  /components
+    Navbar.jsx
+    ConfirmDialog.jsx
+    ErrorAlert.jsx
+  /pages
+    Login.jsx
+    ArtistList.jsx
+    ArtistForm.jsx
+    ArtistDetail.jsx
+    AlbumList.jsx
+    AlbumForm.jsx
+  /services
+    api.js
+    authService.js
+    artistaService.js
+    albumService.js
+  theme.js
+  App.jsx
+  main.jsx
 ```
 
-### 2. Instalar las dependencias
-
-```bash
-npm install
-```
-
-### 3. Configurar las variables de entorno
-
-Crear un archivo `.env` en la raíz del proyecto con el siguiente contenido:
+## Variables de entorno (.env)
 
 ```
 VITE_API_URL=http://127.0.0.1:8000
@@ -39,39 +72,93 @@ VITE_CLIENT_ID=tu_client_id
 VITE_CLIENT_SECRET=tu_client_secret
 ```
 
-> El `client_id` y `client_secret` se obtienen registrando una aplicación OAuth2 en el panel de administración del backend (ver README del backend, sección "Registrar una aplicación OAuth2"). Deben coincidir exactamente con los generados ahí.
+El `client_id` y `client_secret` se obtienen registrando una aplicación OAuth2 en el panel de administración del backend (ver README del backend, sección "Registrar una aplicación OAuth2").
 
-### 4. Levantar el servidor de desarrollo
+## Instalación del proyecto
 
-```bash
+1. Clonar el repositorio
+
+```
+git clone https://github.com/danielaculqui-maker/music-catalog-frontend.git
+cd music-catalog-frontend
+```
+
+2. Abrir en VS Code la carpeta del repositorio clonado
+
+3. Instalar las dependencias base
+
+```
+npm install
+```
+
+4. Instalar Material UI y sus dependencias (si no quedaron instaladas con el paso anterior)
+
+```
+npm install @mui/material @emotion/react @emotion/styled
+```
+
+5. Instalar Axios
+
+```
+npm install axios
+```
+
+6. Instalar React Router
+
+```
+npm install react-router-dom
+```
+
+7. Crear el archivo `.env` en la raíz del proyecto con las variables de entorno indicadas arriba
+
+## Comandos útiles
+
+Ejecutar el servidor de desarrollo
+
+```
 npm run dev
 ```
 
-La aplicación queda disponible en `http://localhost:5173/`
-
-## 📱 Funcionalidades
-
-- **Login** con OAuth 2.0 (usuario y contraseña)
-- **Artistas**: listar, ver detalle (con sus álbumes), crear, editar (incluye foto) y eliminar
-- **Álbumes**: listar (agrupados por artista), crear, editar y eliminar
-- Interfaz con diseño personalizado (paleta oscura, tipografía propia)
-
-## 📁 Estructura del proyecto
+Comprobar versión de dependencias
 
 ```
-src/
-├── components/       # Componentes reutilizables (Navbar, ConfirmDialog)
-├── pages/            # Pantallas de la aplicación
-├── services/         # Lógica de conexión con la API (axios)
-├── theme.js          # Tema visual de Material UI
-└── App.jsx           # Rutas de la aplicación
+npm list
 ```
 
-## 🔐 Autenticación
+Limpiar dependencias
 
-El login se realiza contra el endpoint `/o/token/` del backend. El token obtenido se guarda en `localStorage` y se envía automáticamente en cada petición protegida mediante un interceptor de Axios.
+```
+rm -rf node_modules
+npm install
+```
 
-## 👥 Autores
+## Comandos git
 
-- Daniela Culqui
-- Cristian Tenorio
+Verificar los archivos modificados
+
+```
+git status
+```
+
+Agregar archivos al área de preparación
+
+```
+git add .
+```
+
+Realizar un commit
+
+```
+git commit -m "descripción de cambios"
+```
+
+Enviar los cambios a GitHub
+
+```
+git push
+```
+
+## Autenticación
+
+El login se realiza contra el endpoint `/o/token/` del backend, usando el grant type `password`. El token obtenido se guarda en `localStorage` y se envía automáticamente en cada petición protegida mediante un interceptor de Axios.
+
