@@ -22,3 +22,10 @@
   color: var(--color-text) !important;
   border-color: var(--color-border) !important;
 }
+@media (max-width: 600px) {
+  .artist-form-container {
+    max-width: calc(100% - 32px);
+    margin: 16px auto;
+    padding: 20px;
+  }
+}

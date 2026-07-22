@@ -29,6 +29,7 @@ body {
   margin: 0;
   background-color: var(--color-bg);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 h1, h2, h3 {

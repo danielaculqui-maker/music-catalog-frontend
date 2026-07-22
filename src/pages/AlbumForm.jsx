@@ -102,7 +102,7 @@ function AlbumForm() {
             type="date"
             fullWidth
             margin="normal"
-            InputLabelProps={{ shrink: true }}
+            slotProps={{ inputLabel: { shrink: true } }}
             value={fechaLanzamiento}
             onChange={(e) => setFechaLanzamiento(e.target.value)}
             required

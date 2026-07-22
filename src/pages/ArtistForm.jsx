@@ -99,7 +99,7 @@ function ArtistForm() {
             type="date"
             fullWidth
             margin="normal"
-            InputLabelProps={{ shrink: true }}
+            slotProps={{ inputLabel: { shrink: true } }}
             value={fechaFormacion}
             onChange={(e) => setFechaFormacion(e.target.value)}
             required
