@@ -40,3 +40,8 @@
 .btn-primary:hover {
   background-color: rgba(161, 161, 170, 0.3) !important;
 }
+
+.search-field {
+  max-width: 400px;
+  margin-bottom: 32px !important;
+}

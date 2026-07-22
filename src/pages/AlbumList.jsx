@@ -2,35 +2,37 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAlbumes, deleteAlbum } from '../services/albumService'
 import { getArtistas } from '../services/artistaService'
-import { Button, Typography, Card, CardContent, CircularProgress } from '@mui/material'
+import { Button, Typography, Card, CardContent, CircularProgress, TextField, InputAdornment } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 import Navbar from '../components/Navbar'
 import ConfirmDialog from '../components/ConfirmDialog'
-import './AlbumList.css'
 import ErrorAlert from '../components/ErrorAlert'
+import './AlbumList.css'
 
 function AlbumList() {
   const [albumes, setAlbumes] = useState([])
   const [artistas, setArtistas] = useState([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
+  const [busqueda, setBusqueda] = useState('')
   const [dialogoAbierto, setDialogoAbierto] = useState(false)
   const [albumAEliminar, setAlbumAEliminar] = useState(null)
   const navigate = useNavigate()
 
   const cargarDatos = () => {
-  setCargando(true)
-  setError('')
-  Promise.all([getAlbumes(), getArtistas()])
-    .then(([resAlbumes, resArtistas]) => {
-      setAlbumes(resAlbumes.data)
-      setArtistas(resArtistas.data)
-    })
-    .catch(error => {
-      console.error('Error al traer datos:', error)
-      setError('No se pudieron cargar los álbumes. Verificá tu conexión o intentá de nuevo.')
-    })
-    .finally(() => setCargando(false))
-}
+    setCargando(true)
+    setError('')
+    Promise.all([getAlbumes(), getArtistas()])
+      .then(([resAlbumes, resArtistas]) => {
+        setAlbumes(resAlbumes.data)
+        setArtistas(resArtistas.data)
+      })
+      .catch(error => {
+        console.error('Error al traer datos:', error)
+        setError('No se pudieron cargar los álbumes. Verificá tu conexión o intentá de nuevo.')
+      })
+      .finally(() => setCargando(false))
+  }
 
   useEffect(() => {
     cargarDatos()
@@ -42,21 +44,29 @@ function AlbumList() {
   }
 
   const confirmarEliminar = async () => {
-  try {
-    await deleteAlbum(albumAEliminar)
-    setDialogoAbierto(false)
-    cargarDatos()
-  } catch (error) {
-    console.error('Error al eliminar:', error)
-    setError('No se pudo eliminar el álbum. Intentá de nuevo.')
-    setDialogoAbierto(false)
+    try {
+      await deleteAlbum(albumAEliminar)
+      setDialogoAbierto(false)
+      cargarDatos()
+    } catch (error) {
+      console.error('Error al eliminar:', error)
+      setError('No se pudo eliminar el álbum. Intentá de nuevo.')
+      setDialogoAbierto(false)
+    }
   }
-}
 
-  const albumesPorArtista = artistas.map(artista => ({
-    artista,
-    albumes: albumes.filter(album => album.artista === artista.id),
-  })).filter(grupo => grupo.albumes.length > 0)
+  const texto = busqueda.toLowerCase()
+
+  const albumesPorArtista = artistas
+    .map(artista => ({
+      artista,
+      albumes: albumes.filter(album =>
+        album.artista === artista.id &&
+        (album.titulo.toLowerCase().includes(texto) ||
+         artista.nombre.toLowerCase().includes(texto))
+      ),
+    }))
+    .filter(grupo => grupo.albumes.length > 0)
 
   if (cargando) {
     return (
@@ -73,6 +83,23 @@ function AlbumList() {
     <div>
       <Navbar />
       <div className="artist-list-container">
+        <ErrorAlert message={error} />
+
+        <TextField
+          placeholder="Buscar álbum o artista..."
+          fullWidth
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="search-field"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: 'var(--color-text-secondary)' }} />
+              </InputAdornment>
+            ),
+          }}
+        />
+
         <div className="artist-list-header">
           <Typography variant="h4">Álbumes</Typography>
           <Button
@@ -83,10 +110,12 @@ function AlbumList() {
             + Nuevo álbum
           </Button>
         </div>
-        <ErrorAlert message={error} />
+
         {albumesPorArtista.length === 0 ? (
           <Typography className="empty-state">
-            Todavía no hay álbumes cargados. ¡Creá el primero!
+            {busqueda
+              ? 'No se encontraron álbumes con ese criterio.'
+              : 'Todavía no hay álbumes cargados. ¡Creá el primero!'}
           </Typography>
         ) : (
           albumesPorArtista.map(({ artista, albumes }) => (
