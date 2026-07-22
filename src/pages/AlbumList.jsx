@@ -6,25 +6,31 @@ import { Button, Typography, Card, CardContent, CircularProgress } from '@mui/ma
 import Navbar from '../components/Navbar'
 import ConfirmDialog from '../components/ConfirmDialog'
 import './AlbumList.css'
+import ErrorAlert from '../components/ErrorAlert'
 
 function AlbumList() {
   const [albumes, setAlbumes] = useState([])
   const [artistas, setArtistas] = useState([])
   const [cargando, setCargando] = useState(true)
+  const [error, setError] = useState('')
   const [dialogoAbierto, setDialogoAbierto] = useState(false)
   const [albumAEliminar, setAlbumAEliminar] = useState(null)
   const navigate = useNavigate()
 
   const cargarDatos = () => {
-    setCargando(true)
-    Promise.all([getAlbumes(), getArtistas()])
-      .then(([resAlbumes, resArtistas]) => {
-        setAlbumes(resAlbumes.data)
-        setArtistas(resArtistas.data)
-      })
-      .catch(error => console.error('Error al traer datos:', error))
-      .finally(() => setCargando(false))
-  }
+  setCargando(true)
+  setError('')
+  Promise.all([getAlbumes(), getArtistas()])
+    .then(([resAlbumes, resArtistas]) => {
+      setAlbumes(resAlbumes.data)
+      setArtistas(resArtistas.data)
+    })
+    .catch(error => {
+      console.error('Error al traer datos:', error)
+      setError('No se pudieron cargar los álbumes. Verificá tu conexión o intentá de nuevo.')
+    })
+    .finally(() => setCargando(false))
+}
 
   useEffect(() => {
     cargarDatos()
@@ -36,10 +42,16 @@ function AlbumList() {
   }
 
   const confirmarEliminar = async () => {
+  try {
     await deleteAlbum(albumAEliminar)
     setDialogoAbierto(false)
     cargarDatos()
+  } catch (error) {
+    console.error('Error al eliminar:', error)
+    setError('No se pudo eliminar el álbum. Intentá de nuevo.')
+    setDialogoAbierto(false)
   }
+}
 
   const albumesPorArtista = artistas.map(artista => ({
     artista,
@@ -71,7 +83,7 @@ function AlbumList() {
             + Nuevo álbum
           </Button>
         </div>
-
+        <ErrorAlert message={error} />
         {albumesPorArtista.length === 0 ? (
           <Typography className="empty-state">
             Todavía no hay álbumes cargados. ¡Creá el primero!

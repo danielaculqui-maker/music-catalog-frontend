@@ -1,0 +1,5 @@
+.error-alert {
+  margin-bottom: 24px !important;
+  background-color: rgba(248, 113, 113, 0.1) !important;
+  color: var(--color-error) !important;
+}

@@ -4,6 +4,7 @@ import { getAlbum, createAlbum, updateAlbum } from '../services/albumService'
 import { getArtistas } from '../services/artistaService'
 import { TextField, Button, Typography, MenuItem } from '@mui/material'
 import Navbar from '../components/Navbar'
+import ErrorAlert from '../components/ErrorAlert'
 import './ArtistForm.css'
 
 function AlbumForm() {
@@ -16,9 +17,15 @@ function AlbumForm() {
   const [numeroCanciones, setNumeroCanciones] = useState('')
   const [artistaId, setArtistaId] = useState('')
   const [artistas, setArtistas] = useState([])
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    getArtistas().then(response => setArtistas(response.data))
+    getArtistas()
+      .then(response => setArtistas(response.data))
+      .catch(error => {
+        console.error('Error al traer artistas:', error)
+        setError('No se pudo cargar la lista de artistas.')
+      })
 
     if (esEdicion) {
       getAlbum(id).then(response => {
@@ -33,6 +40,8 @@ function AlbumForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
+
     const albumData = {
       titulo,
       fecha_lanzamiento: fechaLanzamiento,
@@ -40,13 +49,17 @@ function AlbumForm() {
       artista: artistaId,
     }
 
-    if (esEdicion) {
-      await updateAlbum(id, albumData)
-    } else {
-      await createAlbum(albumData)
+    try {
+      if (esEdicion) {
+        await updateAlbum(id, albumData)
+      } else {
+        await createAlbum(albumData)
+      }
+      navigate('/albumes')
+    } catch (error) {
+      console.error('Error al guardar álbum:', error)
+      setError('No se pudo guardar el álbum. Verificá los datos e intentá de nuevo.')
     }
-
-    navigate('/albumes')
   }
 
   return (
@@ -56,6 +69,8 @@ function AlbumForm() {
         <Typography variant="h4" className="form-title">
           {esEdicion ? 'Editar álbum' : 'Nuevo álbum'}
         </Typography>
+
+        <ErrorAlert message={error} />
 
         <form onSubmit={handleSubmit} className="artist-form">
           <TextField

@@ -4,6 +4,7 @@ import { getArtista, createArtista, updateArtista } from '../services/artistaSer
 import { TextField, Button, Typography } from '@mui/material'
 import Navbar from '../components/Navbar'
 import './ArtistForm.css'
+import ErrorAlert from '../components/ErrorAlert'
 
 function ArtistForm() {
   const { id } = useParams()
@@ -16,6 +17,7 @@ function ArtistForm() {
   const [fechaFormacion, setFechaFormacion] = useState('')
   const [foto, setFoto] = useState(null)
   const [fotoActualUrl, setFotoActualUrl] = useState(null)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if (esEdicion) {
@@ -32,6 +34,7 @@ function ArtistForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
 
     const formData = new FormData()
     formData.append('nombre', nombre)
@@ -42,13 +45,17 @@ function ArtistForm() {
       formData.append('foto', foto)
     }
 
-    if (esEdicion) {
-      await updateArtista(id, formData)
-    } else {
-      await createArtista(formData)
+    try {
+      if (esEdicion) {
+        await updateArtista(id, formData)
+      } else {
+        await createArtista(formData)
+      }
+      navigate('/artistas')
+    } catch (error) {
+      console.error('Error al guardar artista:', error)
+      setError('No se pudo guardar el artista. Verificá los datos e intentá de nuevo.')
     }
-
-    navigate('/artistas')
   }
 
   return (
@@ -58,6 +65,8 @@ function ArtistForm() {
         <Typography variant="h4" className="form-title">
           {esEdicion ? 'Editar artista' : 'Nuevo artista'}
         </Typography>
+
+        <ErrorAlert message={error} />
 
         <form onSubmit={handleSubmit} className="artist-form">
           <TextField
