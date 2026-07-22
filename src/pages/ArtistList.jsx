@@ -5,21 +5,28 @@ import { Button, Typography, Card, CardContent, CircularProgress } from '@mui/ma
 import Navbar from '../components/Navbar'
 import ConfirmDialog from '../components/ConfirmDialog'
 import './ArtistList.css'
+import ErrorAlert from '../components/ErrorAlert'
 
 function ArtistList() {
   const [artistas, setArtistas] = useState([])
   const [cargando, setCargando] = useState(true)
+  const [error, setError] = useState('')
   const [dialogoAbierto, setDialogoAbierto] = useState(false)
   const [artistaAEliminar, setArtistaAEliminar] = useState(null)
   const navigate = useNavigate()
+  
 
   const cargarArtistas = () => {
-    setCargando(true)
-    getArtistas()
-      .then(response => setArtistas(response.data))
-      .catch(error => console.error('Error al traer artistas:', error))
-      .finally(() => setCargando(false))
-  }
+  setCargando(true)
+  setError('')
+  getArtistas()
+    .then(response => setArtistas(response.data))
+    .catch(error => {
+      console.error('Error al traer artistas:', error)
+      setError('No se pudieron cargar los artistas. Verificá tu conexión o intentá de nuevo.')
+    })
+    .finally(() => setCargando(false))
+}
 
   useEffect(() => {
     cargarArtistas()
@@ -31,10 +38,16 @@ function ArtistList() {
   }
 
   const confirmarEliminar = async () => {
+  try {
     await deleteArtista(artistaAEliminar)
     setDialogoAbierto(false)
     cargarArtistas()
+  } catch (error) {
+    console.error('Error al eliminar:', error)
+    setError('No se pudo eliminar el artista. Intentá de nuevo.')
+    setDialogoAbierto(false)
   }
+}
 
   if (cargando) {
     return (
@@ -61,7 +74,7 @@ function ArtistList() {
             + Nuevo artista
           </Button>
         </div>
-
+        <ErrorAlert message={error} />
         {artistas.length === 0 ? (
           <Typography className="empty-state">
             Todavía no hay artistas cargados. ¡Creá el primero!
